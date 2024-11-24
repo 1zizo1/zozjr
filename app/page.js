@@ -15,7 +15,6 @@ async function getData() {
 
     }
   })
-  console.log(typeof document);
 
   if (!res.ok) {
     throw new Error('Failed to fetch data')
