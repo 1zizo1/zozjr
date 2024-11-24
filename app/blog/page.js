@@ -1,19 +1,23 @@
-// @flow strict
 
-import { personalData } from "@/utils/data/personal-data";
 import BlogCard from "../components/homepage/blog/blog-card";
 
-async function getBlogs() {
-  if (typeof window === 'undefined') return []; // Avoid server-side browser-like logic
-  try {
-      const res = await fetch(`https://dev.to/api/articles?username=${personalData.devUsername}`);
-      if (!res.ok) throw new Error('Failed to fetch data');
-      return await res.json();
-  } catch (error) {
-      console.error('Error fetching blogs:', error);
-      return [];
+async function getBlogs() {  
+  const url = `https://dev.to/api/articles/me/all`
+  const res = await fetch(url,{
+    headers:{
+      "api-key":process.env.API_KEY
+    }
+  })
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch data')
   }
-}
+
+  const data = await res.json();
+  
+  return data;
+};
+
 async function page() {
   const blogs = await getBlogs();
 
