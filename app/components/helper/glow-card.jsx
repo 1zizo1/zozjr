@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useRef } from "react";
 
 const GlowCard = ({ children, identifier }) => {
@@ -6,6 +7,9 @@ const GlowCard = ({ children, identifier }) => {
   const cardRefs = useRef([]);
 
   useEffect(() => {
+    // Ensure the code only runs on the client
+    if (typeof window === "undefined") return;
+
     const CONFIG = {
       proximity: 40,
       spread: 80,
@@ -77,11 +81,11 @@ const GlowCard = ({ children, identifier }) => {
   return (
     <div
       ref={containerRef}
-      className={`glow-container-${identifier} glow-container`}
+      className="glow-container-${identifier} glow-container"
     >
       <article
         ref={(el) => cardRefs.current.push(el)}
-        className={`glow-card glow-card-${identifier} h-fit cursor-pointer border border-[#2a2e5a] transition-all duration-300 relative bg-[#101123] text-gray-200 rounded-xl hover:border-transparent w-full`}
+        className="glow-card glow-card-${identifier} h-fit cursor-pointer border border-[#2a2e5a] transition-all duration-300 relative bg-[#101123] text-gray-200 rounded-xl hover:border-transparent w-full"
       >
         <div className="glows"></div>
         {children}
