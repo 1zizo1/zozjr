@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useRef } from "react";
 
 const GlowCard = ({ children, identifier }) => {
@@ -61,24 +60,19 @@ const GlowCard = ({ children, identifier }) => {
       );
     };
 
-    // Ensuring styles are applied when mounted
     RESTYLE();
 
     const handlePointerMove = (event) => {
-      // Handle pointer move event with guard clause
-      if (event && event.x && event.y) {
-        UPDATE(event);
-      }
+      UPDATE(event);
     };
 
-    // Add event listener for pointer movement
     window.addEventListener("pointermove", handlePointerMove);
 
-    // Cleanup function when component unmounts or effect runs again
+    // Cleanup on unmount
     return () => {
       window.removeEventListener("pointermove", handlePointerMove);
     };
-  }, []); // Empty dependency array ensures this runs once when component mounts
+  }, []);
 
   return (
     <div
@@ -86,7 +80,7 @@ const GlowCard = ({ children, identifier }) => {
       className={`glow-container-${identifier} glow-container`}
     >
       <article
-        ref={(el) => el && cardRefs.current.push(el)} // Safely push refs
+        ref={(el) => cardRefs.current.push(el)}
         className={`glow-card glow-card-${identifier} h-fit cursor-pointer border border-[#2a2e5a] transition-all duration-300 relative bg-[#101123] text-gray-200 rounded-xl hover:border-transparent w-full`}
       >
         <div className="glows"></div>
