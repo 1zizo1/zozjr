@@ -1,14 +1,13 @@
-"use client";
+"use client"
+import { useEffect } from 'react';
+import React from "react"; // Add this line
 
-import { useEffect, useRef } from "react";
 
-const GlowCard = ({ children, identifier }) => {
-  const containerRef = useRef(null);
-  const cardRefs = useRef([]);
-
+// eslint-disable-next-line react/prop-types
+const GlowCard = ({ children , identifier}) => {
   useEffect(() => {
-    // Ensure the code only runs on the client
-    if (typeof window === "undefined") return;
+    const CONTAINER = document.querySelector(`.glow-container-${identifier}`);
+    const CARDS = document.querySelectorAll(`.glow-card-${identifier}`);
 
     const CONFIG = {
       proximity: 40,
@@ -20,9 +19,7 @@ const GlowCard = ({ children, identifier }) => {
     };
 
     const UPDATE = (event) => {
-      if (!containerRef.current || cardRefs.current.length === 0) return;
-
-      for (const CARD of cardRefs.current) {
+      for (const CARD of CARDS) {
         const CARD_BOUNDS = CARD.getBoundingClientRect();
 
         if (
@@ -31,9 +28,9 @@ const GlowCard = ({ children, identifier }) => {
           event?.y > CARD_BOUNDS.top - CONFIG.proximity &&
           event?.y < CARD_BOUNDS.top + CARD_BOUNDS.height + CONFIG.proximity
         ) {
-          CARD.style.setProperty("--active", 1);
+          CARD.style.setProperty('--active', 1);
         } else {
-          CARD.style.setProperty("--active", CONFIG.opacity);
+          CARD.style.setProperty('--active', CONFIG.opacity);
         }
 
         const CARD_CENTER = [
@@ -48,45 +45,34 @@ const GlowCard = ({ children, identifier }) => {
 
         ANGLE = ANGLE < 0 ? ANGLE + 360 : ANGLE;
 
-        CARD.style.setProperty("--start", ANGLE + 90);
+        CARD.style.setProperty('--start', ANGLE + 90);
       }
     };
 
-    const RESTYLE = () => {
-      if (!containerRef.current) return;
+    document.body.addEventListener('pointermove', UPDATE);
 
-      containerRef.current.style.setProperty("--gap", CONFIG.gap);
-      containerRef.current.style.setProperty("--blur", CONFIG.blur);
-      containerRef.current.style.setProperty("--spread", CONFIG.spread);
-      containerRef.current.style.setProperty(
-        "--direction",
-        CONFIG.vertical ? "column" : "row"
+    const RESTYLE = () => {
+      CONTAINER.style.setProperty('--gap', CONFIG.gap);
+      CONTAINER.style.setProperty('--blur', CONFIG.blur);
+      CONTAINER.style.setProperty('--spread', CONFIG.spread);
+      CONTAINER.style.setProperty(
+        '--direction',
+        CONFIG.vertical ? 'column' : 'row'
       );
     };
 
     RESTYLE();
+    UPDATE();
 
-    const handlePointerMove = (event) => {
-      UPDATE(event);
-    };
-
-    window.addEventListener("pointermove", handlePointerMove);
-
-    // Cleanup on unmount
+    // Cleanup event listener
     return () => {
-      window.removeEventListener("pointermove", handlePointerMove);
+      document.body.removeEventListener('pointermove', UPDATE);
     };
-  }, []);
+  }, [identifier]);
 
   return (
-    <div
-      ref={containerRef}
-      className="glow-container-${identifier} glow-container"
-    >
-      <article
-        ref={(el) => cardRefs.current.push(el)}
-        className="glow-card glow-card-${identifier} h-fit cursor-pointer border border-[#2a2e5a] transition-all duration-300 relative bg-[#101123] text-gray-200 rounded-xl hover:border-transparent w-full"
-      >
+    <div className={`glow-container-${identifier} glow-container`}>
+      <article className={`glow-card glow-card-${identifier} h-fit cursor-pointer border border-[#2a2e5a] transition-all duration-300 relative bg-[#101123] text-gray-200 rounded-xl hover:border-transparent w-full`}>
         <div className="glows"></div>
         {children}
       </article>
