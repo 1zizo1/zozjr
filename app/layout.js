@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { GoogleTagManager } from "@next/third-parties/google";
 import { Inter } from "next/font/google";
 import { ToastContainer } from "react-toastify";
@@ -6,6 +7,7 @@ import Navbar from "./components/navbar";
 import "./css/card.scss";
 import "./css/globals.scss";
 import ScrollToTop from "./components/helper/scroll-to-top";
+import React from "react";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
