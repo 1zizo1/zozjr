@@ -1,6 +1,6 @@
 "use client";
 import dynamic from 'next/dynamic';
-
+import { useEffect } from 'react';
 
 
 // Dynamically import all components with SSR: false to avoid rendering them during SSR
