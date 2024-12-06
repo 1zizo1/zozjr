@@ -5,7 +5,7 @@ const nextConfig = {
   sassOptions: {
     includePaths: [path.join(process.cwd(), 'styles')],
   },
-
+reactStrictMode:true,
   images: {
     remotePatterns: [
       {
